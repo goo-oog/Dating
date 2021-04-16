@@ -5,7 +5,7 @@ namespace App\Repositories;
 
 use App\Models\Photo;
 
-interface PhotoRepository
+interface PhotosRepository
 {
     public function addPhoto(string $userid,string $filename):void;
 

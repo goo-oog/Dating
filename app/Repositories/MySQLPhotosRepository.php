@@ -7,7 +7,7 @@ use App\Models\Photo;
 use App\Services\MySQLService;
 use PDO;
 
-class MySQLPhotoRepository implements PhotoRepository
+class MySQLPhotosRepository implements PhotosRepository
 {
     private MySQLService $mySQL;
     public function __construct(MySQLService $mySQLService)

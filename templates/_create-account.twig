@@ -1,0 +1,18 @@
+{% extends 'base.twig' %}
+{% block main %}
+    <br>
+    <form method="post" action="/new-user">
+        <label for="username">Name</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Password</label>
+        <input type="text"id="password"name="password">
+        <br>
+        <input type="radio" id="male" name="gender" value="M">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="F">
+        <label for="female">Female</label>
+        <br>
+        <input type="submit" value="Create account">
+    </form>
+{% endblock %}

@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Services\MySQLService;
 use PDO;
 
-class MySQLDatingRepository implements DatingRepository
+class MySQLUsersRepository implements UsersRepository
 {
     private MySQLService $mySQL;
 
@@ -16,10 +16,18 @@ class MySQLDatingRepository implements DatingRepository
         $this->mySQL = $mySQLService;
     }
 
-    public function addUser(User $user): void
+    public function addUser(User $user,string $hash): void
     {
         $this->mySQL->pdo()->prepare('INSERT INTO users (name, gender) VALUES (?,?)')
             ->execute([$user->name(),$user->gender()]);
+        $this->mySQL->pdo()->prepare('INSERT INTO hashes (userid, hash) VALUES ((SELECT id FROM users WHERE name LIKE :name),:hash)')
+            ->execute(['name'=>$user->name(),'hash'=>$hash]);
+    }
+    public function getHash($name): string
+    {
+        $stmt = $this->mySQL->pdo()->prepare('SELECT hash FROM hashes WHERE userid=(SELECT id FROM users WHERE name LIKE :name)');
+        $stmt->execute(['name'=>$name]);
+        return $stmt->fetch()[0];
     }
 
     public function getUser(int $id): User
@@ -27,6 +35,12 @@ class MySQLDatingRepository implements DatingRepository
         $stmt = $this->mySQL->pdo()->prepare('SELECT * FROM users WHERE id=:id');
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, ['id', 'name', 'gender']);
+    }
+    public function checkUsername(string $name): bool
+    {
+        $stmt=$this->mySQL->pdo()->prepare('SELECT * FROM users WHERE name LIKE :name');
+        $stmt->execute(['name'=>$name]);
+        return (bool)$stmt->fetch();
     }
 
     public function likeUser(int $fromId, int $toId): void
