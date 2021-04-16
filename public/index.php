@@ -25,20 +25,20 @@ $container->add(UsersRepository::class, MySQLUsersRepository::class)->addArgumen
 $container->add(PhotosRepository::class, MySQLPhotosRepository::class)->addArgument(MySQLService::class);
 $container->add(NewUserService::class)->addArgument(UsersRepository::class);
 $container->add(AuthService::class)->addArgument(UsersRepository::class);
-$container->add(ViewService::class)->addArguments([UsersRepository::class,PhotosRepository::class]);
+$container->add(ViewService::class)->addArguments([UsersRepository::class, PhotosRepository::class]);
 $container->add(AppController::class)->addArgument(ViewService::class);
-$container->add(AuthController::class)->addArguments([AuthService::class,NewUserService::class,ViewService::class]);
+$container->add(AuthController::class)->addArguments([AuthService::class, NewUserService::class, ViewService::class]);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->get('/', [AppController::class, 'showMainPage']);
-    $r->get('/login',[AuthController::class,'showLoginForm']);
-    $r->post('/authentication',[AuthController::class, 'authentication']);
-    $r->get('/create-account',[AuthController::class,'showCreateAccountForm']);
-    $r->post('/new-user',[AuthController::class,'createNewUser']);
+    $r->get('/login', [AuthController::class, 'showLoginForm']);
+    $r->post('/authentication', [AuthController::class, 'authentication']);
+    $r->get('/create-account', [AuthController::class, 'showCreateAccountForm']);
+    $r->post('/new-user', [AuthController::class, 'createNewUser']);
 });
 
-$middlewares=[
-    AppController::class.'@showMainPage'=>[
+$middlewares = [
+    AppController::class . '@showMainPage' => [
         AuthMiddleware::class
     ]
 ];
@@ -62,9 +62,9 @@ switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::FOUND:
         [$controller, $method] = $routeInfo[1];
         $vars = $routeInfo[2];
-        $middlewareKey=$controller.'@'.$method;
-        $controllerMiddlewares=$middlewares[$middlewareKey]??[];
-        foreach ($controllerMiddlewares as $controllerMiddleware){
+        $middlewareKey = $controller . '@' . $method;
+        $controllerMiddlewares = $middlewares[$middlewareKey] ?? [];
+        foreach ($controllerMiddlewares as $controllerMiddleware) {
             (new $controllerMiddleware())->handle();
         }
         echo $container->get($controller)->$method($vars);

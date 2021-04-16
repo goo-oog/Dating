@@ -13,25 +13,35 @@ class AuthController
     private NewUserService $newUser;
     private ViewService $view;
 
-    public function __construct(AuthService $authorization,NewUserService $newUser,ViewService $view)
+    public function __construct(AuthService $authorization, NewUserService $newUser, ViewService $view)
     {
-        $this->authorization=$authorization;
-        $this->newUser=$newUser;
-        $this->view=$view;
+        $this->authorization = $authorization;
+        $this->newUser = $newUser;
+        $this->view = $view;
     }
-    public function showLoginForm():string{
+
+    public function showLoginForm(): string
+    {
         return $this->view->draw('_login.twig');
     }
-    public function showCreateAccountForm():string{
+
+    public function showCreateAccountForm(): string
+    {
         return $this->view->draw('_create-account.twig');
     }
-    public function authentication():void{
+
+    public function authentication(): void
+    {
         $this->authorization->verify();
     }
-    public function createNewUser():void{
+
+    public function createNewUser(): void
+    {
         $this->newUser->createNewUser();
     }
-    public function logout():void{
+
+    public function logout(): void
+    {
         //TODO:
     }
 }

@@ -12,15 +12,17 @@ class NewUserService
 
     public function __construct(UsersRepository $users)
     {
-        $this->users=$users;
+        $this->users = $users;
     }
-    public function createNewUser():void{
-        if($this->users->checkUsername($_POST['username'])){
+
+    public function createNewUser(): void
+    {
+        if ($this->users->checkUsername($_POST['username'])) {
             header('Location:/create-account');
-        }else{
-            $hash=password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $this->users->addUser(new User(0,$_POST['username'],$_POST['gender']),$hash);
-            $_SESSION['authId']=$hash;
+        } else {
+            $hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+            $this->users->addUser(new User(0, $_POST['username'], $_POST['gender']), $hash);
+            $_SESSION['authId'] = $hash;
             header('Location:/');
         }
     }

@@ -16,17 +16,18 @@ class MySQLUsersRepository implements UsersRepository
         $this->mySQL = $mySQLService;
     }
 
-    public function addUser(User $user,string $hash): void
+    public function addUser(User $user, string $hash): void
     {
         $this->mySQL->pdo()->prepare('INSERT INTO users (name, gender) VALUES (?,?)')
-            ->execute([$user->name(),$user->gender()]);
+            ->execute([$user->name(), $user->gender()]);
         $this->mySQL->pdo()->prepare('INSERT INTO hashes (userid, hash) VALUES ((SELECT id FROM users WHERE name LIKE :name),:hash)')
-            ->execute(['name'=>$user->name(),'hash'=>$hash]);
+            ->execute(['name' => $user->name(), 'hash' => $hash]);
     }
+
     public function getHash($name): string
     {
         $stmt = $this->mySQL->pdo()->prepare('SELECT hash FROM hashes WHERE userid=(SELECT id FROM users WHERE name LIKE :name)');
-        $stmt->execute(['name'=>$name]);
+        $stmt->execute(['name' => $name]);
         return $stmt->fetch()[0];
     }
 
@@ -36,23 +37,24 @@ class MySQLUsersRepository implements UsersRepository
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, ['id', 'name', 'gender']);
     }
+
     public function checkUsername(string $name): bool
     {
-        $stmt=$this->mySQL->pdo()->prepare('SELECT * FROM users WHERE name LIKE :name');
-        $stmt->execute(['name'=>$name]);
+        $stmt = $this->mySQL->pdo()->prepare('SELECT * FROM users WHERE name LIKE :name');
+        $stmt->execute(['name' => $name]);
         return (bool)$stmt->fetch();
     }
 
     public function likeUser(int $fromId, int $toId): void
     {
         $this->mySQL->pdo()->prepare('INSERT INTO likes (userid, liked_by) VALUES (?,?)')
-            ->execute([$toId,$fromId]);
+            ->execute([$toId, $fromId]);
     }
 
     public function dislikeUser(int $fromId, int $toId): void
     {
         $this->mySQL->pdo()->prepare('INSERT INTO likes (userid, disliked_by) VALUES (?,?)')
-            ->execute([$toId,$fromId]);
+            ->execute([$toId, $fromId]);
     }
 
     /**

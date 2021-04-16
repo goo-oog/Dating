@@ -11,13 +11,15 @@ class AuthService
 
     public function __construct(UsersRepository $users)
     {
-        $this->users=$users;
+        $this->users = $users;
     }
-    public function verify():void{
-        $hash=$this->users->getHash($_POST['username']);
-        if(password_verify($_POST['password'],$hash)){
+
+    public function verify(): void
+    {
+        $hash = $this->users->getHash($_POST['username']);
+        if (password_verify($_POST['password'], $hash)) {
             header('Location:/');
-        }else{
+        } else {
             header('Location:/login');
         }
     }

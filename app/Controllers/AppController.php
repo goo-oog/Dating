@@ -11,10 +11,11 @@ class AppController
 
     public function __construct(ViewService $view)
     {
-        $this->view=$view;
+        $this->view = $view;
     }
 
-    public function showMainPage():string{
+    public function showMainPage(): string
+    {
         return $this->view->draw('_main-page.twig');
     }
 }

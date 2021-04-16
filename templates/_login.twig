@@ -1,15 +1,15 @@
 {% extends 'base.twig' %}
 {% block main %}
-<br>
-<form method="post" action="/authentication">
-    <label for="username">Name</label>
-    <input type="text" id="username" name="username">
     <br>
-    <label for="password">Password</label>
-    <input type="text"id="password"name="password">
-    <br>
-    <input type="submit" value="Log in">
-</form>
+    <form method="post" action="/authentication">
+        <label for="username">Name</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Password</label>
+        <input type="text" id="password" name="password">
+        <br>
+        <input type="submit" value="Log in">
+    </form>
     <a href="/create-account">Or create account</a>
 
 

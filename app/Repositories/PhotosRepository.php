@@ -7,11 +7,11 @@ use App\Models\Photo;
 
 interface PhotosRepository
 {
-    public function addPhoto(string $userid,string $filename):void;
+    public function addPhoto(string $userid, string $filename): void;
 
     /**
      * @param int $id
      * @return Photo[]
      */
-    public function getUserPhotos(int $id):array;
+    public function getUserPhotos(int $id): array;
 }
