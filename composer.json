@@ -1,7 +1,10 @@
 {
     "name": "gints/dating",
     "description": "",
-    "require": {},
+    "require": {
+        "vlucas/phpdotenv": "^5.3",
+      "ext-pdo": "*"
+    },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5"
