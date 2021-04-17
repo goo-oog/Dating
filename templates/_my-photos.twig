@@ -1,0 +1,13 @@
+{% extends 'base.twig' %}
+{% block main %}
+    <br>
+    <table>
+{% for photo in photos.getUserPhotos(currentUser.id) %}
+    <tr>
+        <td>{{ photo.userFilename }}</td>
+        <td><img src="data:image/jpeg;base64,{{ photoService.getPhoto(photo.filename) }}"></td>
+        <td>{{ photo.userid }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

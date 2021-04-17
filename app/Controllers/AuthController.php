@@ -32,16 +32,16 @@ class AuthController
 
     public function authentication(): void
     {
-        $this->authorization->verify();
+        $this->authorization->verify($_POST['username'],$_POST['password']);
     }
 
     public function createNewUser(): void
     {
-        $this->newUser->createNewUser();
+        $this->newUser->createNewUser($_POST['username'],$_POST['password'],$_POST['gender']);
     }
 
     public function logout(): void
     {
-        //TODO:
+        $this->authorization->logout();
     }
 }

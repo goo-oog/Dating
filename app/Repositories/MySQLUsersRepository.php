@@ -31,12 +31,18 @@ class MySQLUsersRepository implements UsersRepository
         return $stmt->fetch()[0];
     }
 
-    public function getUser(int $id): User
+    public function getUserById(int $id): User
     {
-        $stmt = $this->mySQL->pdo()->prepare('SELECT * FROM users WHERE id=:id');
+        $stmt = $this->mySQL->pdo()->prepare('SELECT id, name, gender FROM users WHERE id=:id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, ['id', 'name', 'gender']);
+        return new User(...$stmt->fetch());
     }
+public function getUserByHash(string $hash):User
+{
+    $stmt=$this->mySQL->pdo()->prepare('SELECT id, name, gender FROM users JOIN hashes ON id=userid WHERE hash=:hash');
+    $stmt->execute(['hash'=>$hash]);
+    return new User(...$stmt->fetch());
+}
 
     public function checkUsername(string $name): bool
     {
@@ -63,10 +69,15 @@ class MySQLUsersRepository implements UsersRepository
     public function getUnratedUsersByCurrentUserId(int $id): array
     {
         $stmt = $this->mySQL->pdo()->prepare(
-            'SELECT * FROM users WHERE id NOT IN
-                    (SELECT userid FROM likes WHERE liked_by=:id OR disliked_by=:id)
-                      AND gender<>(SELECT gender from users WHERE id=:id);');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, ['id', 'name', 'gender']);
+            'SELECT id, name, gender FROM users WHERE id NOT IN
+                    (SELECT userid FROM likes WHERE liked_by = ? OR disliked_by = ?)
+                      AND gender<>(SELECT gender from users WHERE id = ?);');
+        $stmt->execute([$id,$id,$id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
+//        $users=[];
+//        foreach ($stmt->fetchAll() as $user){
+//            $users[]=new User(...$user);
+//        }
+//        return $users;
     }
 }

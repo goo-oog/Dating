@@ -16,10 +16,10 @@ class MySQLPhotosRepository implements PhotosRepository
         $this->mySQL = $mySQLService;
     }
 
-    public function addPhoto(string $userid, string $filename): void
+    public function addPhoto(int $userid, string $filename,string $userFilename): void
     {
-        $this->mySQL->pdo()->prepare('INSERT INTO photos (userid, filename) VALUES (?,?)')
-            ->execute([$userid, $filename]);
+        $this->mySQL->pdo()->prepare('INSERT INTO photos (userid, filename, userfilename) VALUES (?,?,?)')
+            ->execute([$userid, $filename,$userFilename]);
     }
 
     /**
@@ -29,6 +29,6 @@ class MySQLPhotosRepository implements PhotosRepository
     {
         $stmt = $this->mySQL->pdo()->prepare('SELECT * FROM photos WHERE userid=:id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Photo::class, ['userid', 'filename']);
+        return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Photo::class, [(int)'userid', 'filename','userfilename']); //do not rename these!
     }
 }

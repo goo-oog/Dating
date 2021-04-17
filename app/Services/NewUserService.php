@@ -15,13 +15,13 @@ class NewUserService
         $this->users = $users;
     }
 
-    public function createNewUser(): void
+    public function createNewUser(string $username,string $password,string $gender): void
     {
-        if ($this->users->checkUsername($_POST['username'])) {
+        if ($this->users->checkUsername($username)) {
             header('Location:/create-account');
         } else {
-            $hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $this->users->addUser(new User(0, $_POST['username'], $_POST['gender']), $hash);
+            $hash = password_hash($password, PASSWORD_BCRYPT);
+            $this->users->addUser(new User(0, $username, $gender), $hash);
             $_SESSION['authId'] = $hash;
             header('Location:/');
         }

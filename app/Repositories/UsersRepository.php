@@ -11,7 +11,9 @@ interface UsersRepository
 
     public function getHash($name): string;
 
-    public function getUser(int $id): User;
+    public function getUserById(int $id): User;
+
+    public function getUserByHash(string $hash):User;
 
     public function checkUsername(string $name): bool;
 

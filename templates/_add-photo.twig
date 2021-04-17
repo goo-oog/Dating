@@ -1,0 +1,9 @@
+{% extends 'base.twig' %}
+{% block main %}
+    <br>
+    <form method="post" enctype="multipart/form-data" action="/add-photo">
+        <input type="file" name="file" id="file">
+        <br>
+        <input type="submit" value="Upload photo">
+    </form>
+{% endblock %}

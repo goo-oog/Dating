@@ -7,7 +7,7 @@ use App\Models\Photo;
 
 interface PhotosRepository
 {
-    public function addPhoto(string $userid, string $filename): void;
+    public function addPhoto(int $userid, string $filename,string $userFilename): void;
 
     /**
      * @param int $id

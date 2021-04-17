@@ -1,1 +1,9 @@
 <p>Table</p>
+<table>
+    {% for user in users.getUnratedUsersByCurrentUserId(currentUser.id) %}
+        <tr>
+            <td>{{ user.name }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
