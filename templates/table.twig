@@ -1,8 +1,24 @@
-<p>Table</p>
 <table>
     {% for user in users.getUnratedUsersByCurrentUserId(currentUser.id) %}
         <tr>
-            <td>{{ user.name }}</td>
+            <td colspan="3">{{ user.name }}</td>
+        </tr>
+        <tr>
+            <td>
+                <form method="post" action="/dislike">
+                    <input type="hidden" name="id" value="{{ user.id }}">
+                    <input type="submit" value="Dislike">
+                </form>
+            </td>
+            <td>{% set filename=photos.getUserPhotos(user.id)[0].filename %}
+                <img src="photo/{{ filename[:32] }}{{ filename[33:] }}" class="w-96">
+            </td>
+            <td>
+                <form method="post" action="/like">
+                    <input type="hidden" name="id" value="{{ user.id }}">
+                    <input type="submit" value="Like">
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </table>

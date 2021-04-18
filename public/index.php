@@ -14,6 +14,7 @@ use App\Services\AuthService;
 use App\Services\MySQLService;
 use App\Services\NewUserService;
 use App\Services\PhotoService;
+use App\Services\RatingService;
 use App\Services\ViewService;
 use League\Container\Container;
 
@@ -27,8 +28,9 @@ $container->add(PhotosRepository::class, MySQLPhotosRepository::class)->addArgum
 $container->add(NewUserService::class)->addArgument(UsersRepository::class);
 $container->add(AuthService::class)->addArgument(UsersRepository::class);
 $container->add(PhotoService::class)->addArguments([UsersRepository::class, PhotosRepository::class]);
+$container->add(RatingService::class)->addArgument(UsersRepository::class);
 $container->add(ViewService::class)->addArguments([UsersRepository::class, PhotosRepository::class,PhotoService::class]);
-$container->add(AppController::class)->addArguments([PhotoService::class,ViewService::class]);
+$container->add(AppController::class)->addArguments([PhotoService::class, RatingService::class,ViewService::class]);
 $container->add(AuthController::class)->addArguments([AuthService::class, NewUserService::class, ViewService::class]);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -41,6 +43,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->get('/add-photo',[AppController::class,'showAddPhotoForm']);
     $r->post('/add-photo',[AppController::class,'addPhoto']);
     $r->get('/my-photos',[AppController::class,'showMyPhotos']);
+    $r->get('/photo/{photo}',[AppController::class,'photo']);
+    $r->post('/like',[AppController::class,'like']);
+    $r->post('/dislike',[AppController::class,'dislike']);
 });
 
 $middlewares = [

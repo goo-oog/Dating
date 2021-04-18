@@ -45,16 +45,24 @@ class PhotoService
 
     public function getPhoto(string $filename)
     {
-        $realFilename = self::PHOTOS_PATH . substr($filename, 0, 2) . '/' . substr($filename, 2, 2) . '/' . $filename;
-//        var_dump($realFilename);die();
-//        var_dump(file_get_contents($realFilename));die();
-//        $imginfo = getimagesize($realFilename);
-//        header("Content-type: 'image/jpeg'");
-//        header("content-type: image/jpeg");
-//        return readfile($realFilename);
-        $file= file_get_contents($realFilename);
-//        header('Content-Type: application/octet-stream');
-//        return $realFilename;
-        return base64_encode($file);
+        $realFilename =
+            self::PHOTOS_PATH
+            . substr($filename, 0, 2)
+            . '/' . substr($filename, 2, 2)
+            . '/' . substr($filename, 0, 32)
+            . '.' . substr($filename, 32);
+        switch (substr($filename, 32)) {
+            case 'jpg':
+            case 'jpeg':
+                $contentType = 'image/jpeg';
+                break;
+            case 'png':
+                $contentType = 'image/png';
+                break;
+            case 'gif':
+                $contentType = 'image/gif';
+        }
+        header('content-type: ' . $contentType);
+        return file_get_contents($realFilename);
     }
 }

@@ -25,17 +25,14 @@ class ViewService
             'photos' => $this->photos,
             'photoService'=>$this->photoService,
             'SESSION'=>$_SESSION,
-            'currentUser'=>$this->users->getUserByHash($_SESSION['authId'])
         ];
     }
 
     public function draw(string $filename): string
     {
-//echo '<pre>';
-//      users.getUnratedUsersByCurrentUserId(users.getUserByHash(SESSION.authId).id)
-//        var_dump($this->users->getUnratedUsersByCurrentUserId(113));die();
-//        var_dump($this->photos->getUserPhotos($this->users->getUserByHash($_SESSION['authId'])->id()));die();
-//        header("Content-type: 'image/jpeg'");
+        if(isset($_SESSION['authId'])){
+            $this->twigVariables['currentUser']=$this->users->getUserByHash($_SESSION['authId']);
+        }
         return $this->twig->environment()->render($filename, $this->twigVariables);
     }
 }

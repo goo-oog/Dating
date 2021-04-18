@@ -3,4 +3,3 @@
 .phpunit.result.cache
 **/.env
 **/node_modules/
-storage/cache/**/

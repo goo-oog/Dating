@@ -71,7 +71,7 @@ public function getUserByHash(string $hash):User
         $stmt = $this->mySQL->pdo()->prepare(
             'SELECT id, name, gender FROM users WHERE id NOT IN
                     (SELECT userid FROM likes WHERE liked_by = ? OR disliked_by = ?)
-                      AND gender<>(SELECT gender from users WHERE id = ?);');
+                      AND gender<>(SELECT gender from users WHERE id = ?) LIMIT 1');
         $stmt->execute([$id,$id,$id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
 //        $users=[];

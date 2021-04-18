@@ -1,11 +1,12 @@
 {% extends 'base.twig' %}
+ {% block header %}{% include'header.twig' %}{% endblock %}
 {% block main %}
     <br>
     <table>
 {% for photo in photos.getUserPhotos(currentUser.id) %}
     <tr>
         <td>{{ photo.userFilename }}</td>
-        <td><img src="data:image/jpeg;base64,{{ photoService.getPhoto(photo.filename) }}"></td>
+        <td><img src="photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="w-60"></td>
         <td>{{ photo.userid }}</td>
     </tr>
     {% endfor %}
