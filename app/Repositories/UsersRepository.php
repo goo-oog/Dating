@@ -26,4 +26,10 @@ interface UsersRepository
      * @return User[]
      */
     public function getUnratedUsersByCurrentUserId(int $id): array;
+
+    /**
+     * @param int $id
+     * @return User[]
+     */
+    public function getMatches(int $id): array;
 }

@@ -37,12 +37,13 @@ class MySQLUsersRepository implements UsersRepository
         $stmt->execute(['id' => $id]);
         return new User(...$stmt->fetch());
     }
-public function getUserByHash(string $hash):User
-{
-    $stmt=$this->mySQL->pdo()->prepare('SELECT id, name, gender FROM users JOIN hashes ON id=userid WHERE hash=:hash');
-    $stmt->execute(['hash'=>$hash]);
-    return new User(...$stmt->fetch());
-}
+
+    public function getUserByHash(string $hash): User
+    {
+        $stmt = $this->mySQL->pdo()->prepare('SELECT id, name, gender FROM users JOIN hashes ON id=userid WHERE hash=:hash');
+        $stmt->execute(['hash' => $hash]);
+        return new User(...$stmt->fetch());
+    }
 
     public function checkUsername(string $name): bool
     {
@@ -71,13 +72,17 @@ public function getUserByHash(string $hash):User
         $stmt = $this->mySQL->pdo()->prepare(
             'SELECT id, name, gender FROM users WHERE id NOT IN
                     (SELECT userid FROM likes WHERE liked_by = ? OR disliked_by = ?)
-                      AND gender<>(SELECT gender from users WHERE id = ?) LIMIT 1');
-        $stmt->execute([$id,$id,$id]);
+                      AND gender<>(SELECT gender from users WHERE id = ?) ORDER BY RAND() LIMIT 1');
+        $stmt->execute([$id, $id, $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
-//        $users=[];
-//        foreach ($stmt->fetchAll() as $user){
-//            $users[]=new User(...$user);
-//        }
-//        return $users;
+    }
+
+    public function getMatches(int $id): array
+    {
+        $stmt = $this->mySQL->pdo()->prepare(
+            'SELECT userid FROM (SELECT userid FROM likes WHERE liked_by = ?) x
+                    JOIN (SELECT liked_by FROM likes WHERE userid = ?) y ON x.userid = y.liked_by');
+        $stmt->execute([$id, $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
     }
 }
