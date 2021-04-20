@@ -80,8 +80,9 @@ class MySQLUsersRepository implements UsersRepository
     public function getMatches(int $id): array
     {
         $stmt = $this->mySQL->pdo()->prepare(
-            'SELECT userid FROM (SELECT userid FROM likes WHERE liked_by = ?) x
-                    JOIN (SELECT liked_by FROM likes WHERE userid = ?) y ON x.userid = y.liked_by');
+            'SELECT id, name, gender FROM users WHERE id IN
+                    (SELECT userid FROM (SELECT userid FROM likes WHERE liked_by = ?) x
+                    JOIN (SELECT liked_by FROM likes WHERE userid = ?) y ON x.userid = y.liked_by)');
         $stmt->execute([$id, $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
     }

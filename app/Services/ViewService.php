@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Repositories\PhotosRepository;
 use App\Repositories\UsersRepository;
+use ArgumentCountError;
 
 class ViewService
 {
@@ -31,7 +32,12 @@ class ViewService
     public function draw(string $filename): string
     {
         if(isset($_SESSION['authId'])){
-            $this->twigVariables['currentUser']=$this->users->getUserByHash($_SESSION['authId']);
+            try {
+                $this->twigVariables['currentUser']=$this->users->getUserByHash($_SESSION['authId']);
+            }catch (ArgumentCountError $e){
+                unset($_SESSION['authId']);
+                header('Location: /login');
+            }
         }
         return $this->twig->environment()->render($filename, $this->twigVariables);
     }

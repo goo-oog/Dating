@@ -16,7 +16,11 @@ class AuthService
 
     public function verify(string $username, string $password): void
     {
-        $hash = $this->users->getHash($username);
+        try{
+            $hash = $this->users->getHash($username);
+        }catch (\TypeError $e){
+            header('Location:/login');
+        }
         if (password_verify($password, $hash)) {
             $_SESSION['authId']=$hash;
             header('Location:/');

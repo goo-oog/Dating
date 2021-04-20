@@ -7,7 +7,6 @@ class AuthMiddleware
 {
     public function handle(): void
     {
-        //unset($_SESSION['authId']);
         if (!isset($_SESSION['authId'])) {
             header('Location:/login');
         }
