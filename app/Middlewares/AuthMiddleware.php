@@ -5,7 +5,7 @@ namespace App\Middlewares;
 
 class AuthMiddleware
 {
-    public function handle(): void
+    public function execute(): void
     {
         if (!isset($_SESSION['authId'])) {
             header('Location:/login');

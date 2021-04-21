@@ -13,10 +13,10 @@ class AppController
     private RatingService $rate;
     private ViewService $view;
 
-    public function __construct(PhotoService $photo,RatingService $rate,ViewService $view)
+    public function __construct(PhotoService $photo, RatingService $rate, ViewService $view)
     {
-        $this->photo=$photo;
-        $this->rate=$rate;
+        $this->photo = $photo;
+        $this->rate = $rate;
         $this->view = $view;
     }
 
@@ -24,22 +24,45 @@ class AppController
     {
         return $this->view->draw('_main-page.twig');
     }
-    public function showAddPhotoForm():string{
+
+    public function showAddPhotoForm(): string
+    {
         return $this->view->draw('_add-photo.twig');
     }
-    public function addPhoto():void{
+
+    public function addPhoto(): void
+    {
         $this->photo->addPhoto($_FILES['file']);
     }
-    public function showMyPhotos():string{
+
+    public function showMyProfile(): string
+    {
         return $this->view->draw('_my-photos.twig');
     }
-    public function photo(array $vars):string{
+
+    public function photo(array $vars): string
+    {
         return $this->photo->getPhoto($vars['photo']);
     }
-    public function like():void{
+
+    public function like(): void
+    {
         $this->rate->like((int)$_POST['id']);
     }
-    public function dislike():void{
+
+    public function dislike(): void
+    {
         $this->rate->dislike((int)$_POST['id']);
+    }
+
+    public function showMatches(): string
+    {
+        return $this->view->draw('_matches.twig');
+    }
+
+    public function showUserProfile(array $vars): string
+    {
+        $_SESSION['userId'] = $vars['id'];
+        return $this->view->draw('_user-profile.twig');
     }
 }

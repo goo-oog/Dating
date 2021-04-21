@@ -29,23 +29,25 @@ $container->add(NewUserService::class)->addArgument(UsersRepository::class);
 $container->add(AuthService::class)->addArgument(UsersRepository::class);
 $container->add(PhotoService::class)->addArguments([UsersRepository::class, PhotosRepository::class]);
 $container->add(RatingService::class)->addArgument(UsersRepository::class);
-$container->add(ViewService::class)->addArguments([UsersRepository::class, PhotosRepository::class,PhotoService::class]);
-$container->add(AppController::class)->addArguments([PhotoService::class, RatingService::class,ViewService::class]);
+$container->add(ViewService::class)->addArguments([UsersRepository::class, PhotosRepository::class, PhotoService::class]);
+$container->add(AppController::class)->addArguments([PhotoService::class, RatingService::class, ViewService::class]);
 $container->add(AuthController::class)->addArguments([AuthService::class, NewUserService::class, ViewService::class]);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->get('/', [AppController::class, 'showMainPage']);
     $r->get('/login', [AuthController::class, 'showLoginForm']);
-    $r->get('/logout',[AuthController::class,'logout']);
+    $r->get('/logout', [AuthController::class, 'logout']);
     $r->post('/authentication', [AuthController::class, 'authentication']);
     $r->get('/create-account', [AuthController::class, 'showCreateAccountForm']);
     $r->post('/new-user', [AuthController::class, 'createNewUser']);
-    $r->get('/add-photo',[AppController::class,'showAddPhotoForm']);
-    $r->post('/add-photo',[AppController::class,'addPhoto']);
-    $r->get('/my-photos',[AppController::class,'showMyPhotos']);
-    $r->get('/photo/{photo}',[AppController::class,'photo']);
-    $r->post('/like',[AppController::class,'like']);
-    $r->post('/dislike',[AppController::class,'dislike']);
+    $r->get('/add-photo', [AppController::class, 'showAddPhotoForm']);
+    $r->post('/add-photo', [AppController::class, 'addPhoto']);
+    $r->get('/my-profile', [AppController::class, 'showMyProfile']);
+    $r->get('/photo/{photo}', [AppController::class, 'photo']);
+    $r->post('/like', [AppController::class, 'like']);
+    $r->post('/dislike', [AppController::class, 'dislike']);
+    $r->get('/matches', [AppController::class, 'showMatches']);
+    $r->get('/user-profile/{id}', [AppController::class, 'showUserProfile']);
 });
 
 $middlewares = [
@@ -76,7 +78,7 @@ switch ($routeInfo[0]) {
         $middlewareKey = $controller . '@' . $method;
         $controllerMiddlewares = $middlewares[$middlewareKey] ?? [];
         foreach ($controllerMiddlewares as $controllerMiddleware) {
-            (new $controllerMiddleware())->handle();
+            (new $controllerMiddleware())->execute();
         }
         echo $container->get($controller)->$method($vars);
 }

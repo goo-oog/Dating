@@ -20,21 +20,21 @@ class ViewService
         $this->users = $users;
         $this->photos = $photos;
         $this->twig = new TwigService();
-        $this->photoService= $photoService;
-        $this->twigVariables = [
-            'users' => $this->users,
-            'photos' => $this->photos,
-            'photoService'=>$this->photoService,
-            'SESSION'=>$_SESSION,
-        ];
+        $this->photoService = $photoService;
     }
 
     public function draw(string $filename): string
     {
-        if(isset($_SESSION['authId'])){
+        $this->twigVariables = [
+            'users' => $this->users,
+            'photos' => $this->photos,
+            'photoService' => $this->photoService,
+            'SESSION' => $_SESSION,
+        ];
+        if (isset($_SESSION['authId'])) {
             try {
-                $this->twigVariables['currentUser']=$this->users->getUserByHash($_SESSION['authId']);
-            }catch (ArgumentCountError $e){
+                $this->twigVariables['currentUser'] = $this->users->getUserByHash($_SESSION['authId']);
+            } catch (ArgumentCountError $e) {
                 unset($_SESSION['authId']);
                 header('Location: /login');
             }

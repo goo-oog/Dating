@@ -22,7 +22,7 @@ class NewUserService
             $this->users->addUser(new User(0, $username, $gender), $hash);
             $_SESSION['authId'] = $hash;
             header('Location:/');
-        }else{
+        } else {
             header('Location:/create-account');
         }
     }

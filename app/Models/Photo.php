@@ -10,11 +10,11 @@ class Photo
     private string $filename;
     private string $userfilename;
 
-    public function __construct(int $userid, string $filename,string $userfilename)
+    public function __construct(int $userid, string $filename, string $userfilename)
     {
         $this->userid = $userid;
         $this->filename = $filename;
-        $this->userfilename=$userfilename;
+        $this->userfilename = $userfilename;
     }
 
     public function userid(): int
@@ -26,6 +26,7 @@ class Photo
     {
         return $this->filename;
     }
+
     public function userFilename(): string
     {
         return $this->userfilename;

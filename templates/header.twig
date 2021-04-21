@@ -1,11 +1,17 @@
 <br>
 {% if SESSION.authId is defined %}
     {{ currentUser.name }}
-<form method="get" action="/logout">
-    <input type="submit" value="Log out">
-</form>
+    <form method="get" action="/logout">
+        <input type="submit" value="Log out">
+    </form>
     <form method="get" action="/add-photo">
         <input type="submit" value="Add photo">
+    </form>
+    <form method="get" action="/my-profile">
+        <input type="submit" value="My profile">
+    </form>
+    <form method="get" action="/matches">
+        <input type="submit" value="Matches">
     </form>
 {% endif %}
 <br>

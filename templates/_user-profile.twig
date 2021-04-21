@@ -3,10 +3,10 @@
 {% block main %}
     <br>
     <table>
-        {% for photo in photos.getUserPhotos(currentUser.id) %}
+        {% for photo in photos.getUserPhotos(SESSION.userId) %}
             <tr>
                 <td>{{ photo.userFilename }}</td>
-                <td><img src="photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="w-60"></td>
+                <td><img src="../photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="w-60"></td>
                 <td>{{ photo.userid }}</td>
             </tr>
         {% endfor %}

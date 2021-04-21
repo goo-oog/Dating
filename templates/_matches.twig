@@ -1,0 +1,19 @@
+{% extends 'base.twig' %}
+{% block header %}{% include'header.twig' %}{% endblock %}
+{% block main %}
+
+    <br>
+    <table>
+        {% for user in users.getMatches(currentUser.id) %}
+            <tr>
+                <td>{{ user.name }}</td>
+                {% set filename=photos.getUserPhotos(user.id)[0].filename %}
+                <td>
+                    <a href="/user-profile/{{ user.id }}">
+                        <img src="photo/{{ filename[:32] }}{{ filename[33:] }}" class="w-32">
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
