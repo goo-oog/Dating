@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button {
+    @apply bg-gradient-to-b from-gray-200 via-gray-400 to-gray-200 text-black text-sm hover:text-white px-2 rounded-md
+}
+
+.text-input {
+    @apply text-center text-black w-20 text-lg border border-gray-500 rounded-md
+}

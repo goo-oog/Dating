@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="text-2xl">
+<html lang="en" class="text-xl">
 <head>
     <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="text/html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,9 +7,8 @@
     <title>Dating</title>
 </head>
 <body>
+{% block header %}{% include'header.twig' %}{% endblock %}
 <div class="container w-max mx-auto">
-    {% block header %}{% endblock %}
-    {# {% block search %}{% endblock %} #}
     {% block main %}{% endblock %}
 </div>
 </body>

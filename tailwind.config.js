@@ -21,9 +21,14 @@ module.exports = {
             'xl': '1280px',
             '2xl': '1536px',
         },
+        textShadow: {
+            'smallblack': '0px 0px 1px black',
+        },
     },
     variants: {
         extend: {},
     },
-    plugins: []
+    plugins: [
+        require('tailwindcss-textshadow')
+    ]
 }

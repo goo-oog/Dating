@@ -82,7 +82,7 @@ class MySQLUsersRepository implements UsersRepository
         $stmt = $this->mySQL->pdo()->prepare(
             'SELECT id, name, gender FROM users WHERE id IN
                     (SELECT userid FROM (SELECT userid FROM likes WHERE liked_by = ?) x
-                    JOIN (SELECT liked_by FROM likes WHERE userid = ?) y ON x.userid = y.liked_by)');
+                    JOIN (SELECT liked_by FROM likes WHERE userid = ?) y ON x.userid = y.liked_by) ORDER BY RAND()');
         $stmt->execute([$id, $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [(int)'id', 'name', 'gender']);
     }

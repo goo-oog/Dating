@@ -1,17 +1,17 @@
-<br>
 {% if SESSION.authId is defined %}
-    {{ currentUser.name }}
-    <form method="get" action="/logout">
-        <input type="submit" value="Log out">
-    </form>
-    <form method="get" action="/add-photo">
-        <input type="submit" value="Add photo">
-    </form>
-    <form method="get" action="/my-profile">
-        <input type="submit" value="My profile">
-    </form>
-    <form method="get" action="/matches">
-        <input type="submit" value="Matches">
-    </form>
+    <div class="flex w-full px-2 py-1 bg-gray-400 justify-end items-center space-x-2">
+        <p>Logged in as {{ currentUser.name }}</p>
+        <form method="get" action="/my-profile">
+            <input type="submit" class="button" value="My profile">
+        </form>
+        <form method="get" action="/add-photo">
+            <input type="submit" class="button" value="Add photo">
+        </form>
+        <form method="get" action="/matches">
+            <input type="submit" class="button" value="Matches">
+        </form>
+        <form method="get" action="/logout">
+            <input type="submit" class="button" value="Log out">
+        </form>
+    </div>
 {% endif %}
-<br>
