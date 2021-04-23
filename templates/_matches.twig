@@ -1,17 +1,25 @@
 {% extends 'base.twig' %}
-{% block header %}{% include'header.twig' %}{% endblock %}
 {% block main %}
-    <div class="border-2 border-red-400 rounded-xl bg-yellow-700 m-4 text-center">
-        {% for user in users.getMatches(currentUser.id) %}
-            <div class="inline-flex justify-center items-center w-60 h-60 relative"
-                 style="transform: rotate({{ random(-15,15) }}deg)">
-                <a href="/user-profile/{{ user.id }}">
-                    {% set filename=photos.getUserPhotos(user.id)[0].filename %}
-                    <p class="absolute z-10 bottom-8 left-8 text-white text-2xl text-shadow-smallblack">{{ user.name }}</p>
-                    <img src="photo/{{ filename[:32] }}{{ filename[33:] }}"
-                         class="z-0 w-50 border-4 border-blue-400 rounded-xl">
-                </a>
+    <p class="title">Matches</p>
+    {% set matchedUsers=users.getMatches(currentUser.id) %}
+    {% if matchedUsers[0] is defined %}
+        <div class="m-4 text-center">
+            {% for user in matchedUsers %}
+                <div class="inline-flex justify-center items-center relative">
+                    <a href="/user-profile/{{ user.id }}">
+                        {% set filename=photos.getUserPhotos(user.id)[0].filename %}
+                        <p class="absolute z-10 bottom-8 left-8 text-white text-2xl text-shadow-smallblack">{{ user.name }}</p>
+                        <img src="photo/{{ filename[:32] }}{{ filename[33:] }}"
+                             class="z-0 photo-s">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="flex h-screen justify-center items-center">
+            <div class="p-20 text-2xl whitespace-nowrap border-2 border-pink-700 rounded-xl bg-pink-100">
+                <p>No matches found</p>
             </div>
-        {% endfor %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}

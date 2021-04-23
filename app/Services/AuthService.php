@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Repositories\UsersRepository;
+use TypeError;
 
 class AuthService
 {
@@ -18,7 +19,7 @@ class AuthService
     {
         try {
             $hash = $this->users->getHash($username);
-        } catch (\TypeError $e) {
+        } catch (TypeError $e) {
             header('Location:/login');
         }
         if (password_verify($password, $hash)) {

@@ -1,14 +1,13 @@
 {% extends 'base.twig' %}
-{% block header %}{% include'header.twig' %}{% endblock %}
 {% block main %}
-    <br>
-    <table>
+    <div class="text-center">
+        <p class="title">{{ users.getUserById(SESSION.userId).name }}</p>
         {% for photo in photos.getUserPhotos(SESSION.userId) %}
-            <tr>
-                <td>{{ photo.userFilename }}</td>
-                <td><img src="../photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="w-60"></td>
-                <td>{{ photo.userid }}</td>
-            </tr>
+            <div class="inline-flex justify-center items-center">
+                <div class="flex flex-col">
+                    <img src="photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="photo-m">
+                </div>
+            </div>
         {% endfor %}
-    </table>
+    </div>
 {% endblock %}

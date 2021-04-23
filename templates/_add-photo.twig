@@ -1,9 +1,24 @@
 {% extends 'base.twig' %}
 {% block main %}
-    <br>
-    <form method="post" enctype="multipart/form-data" action="/add-photo">
-        <input type="file" name="file" id="file">
-        <br>
-        <input type="submit" value="Upload photo">
-    </form>
+    <div class="flex flex-col h-screen justify-center items-center">
+        <div class="p-12 border-2 border-pink-700 rounded-xl text-center">
+            <div class="mb-8">
+                <p class="text-3xl">Add photo</p>
+            </div>
+            <div class="m-2">
+                <p class="text-pink-700">{{ SESSION.uploadError ?? '&nbsp' }}</p>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="/add-photo" class="flex flex-col space-y-6">
+                <div class="flex flex-col justify-center">
+                    <label for="file" id="file-label"
+                           class="p-2 border border-pink-700 rounded-lg hover:bg-pink-100">Browse...</label>
+                    <input type="file" name="file" id="file" accept="image/jpeg,image/png,image/gif" class="hidden"
+                           onchange="document.getElementById('file-label').innerHTML=this.value.split(/[\\|\/]/).pop().toString()">
+                </div>
+                <div class="flex justify-center">
+                    <input type="submit" class="button" value="Upload">
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

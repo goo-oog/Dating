@@ -35,9 +35,14 @@ class AppController
         $this->photo->addPhoto($_FILES['file']);
     }
 
+    public function deletePhoto(): void
+    {
+        $this->photo->deletePhoto($_POST['filename']);
+    }
+
     public function showMyProfile(): string
     {
-        return $this->view->draw('_my-photos.twig');
+        return $this->view->draw('_my-profile.twig');
     }
 
     public function photo(array $vars): string
@@ -60,9 +65,17 @@ class AppController
         return $this->view->draw('_matches.twig');
     }
 
-    public function showUserProfile(array $vars): string
+    public function userProfile(array $vars): void
     {
         $_SESSION['userId'] = $vars['id'];
-        return $this->view->draw('_user-profile.twig');
+        header('Location:/user-profile');
+    }
+
+    public function showUserProfile(): string
+    {
+        if (isset($_SESSION['userId'])) {
+            return $this->view->draw('_user-profile.twig');
+        }
+        return $this->view->draw('_main-page.twig');
     }
 }

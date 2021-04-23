@@ -9,6 +9,8 @@ interface PhotosRepository
 {
     public function addPhoto(int $userid, string $filename, string $userFilename): void;
 
+    public function deletePhoto(string $filename): void;
+
     /**
      * @param int $id
      * @return Photo[]

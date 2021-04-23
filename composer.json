@@ -1,6 +1,6 @@
 {
   "name": "gints/dating",
-  "description": "",
+  "description": "Dating web site",
   "require": {
     "ext-pdo": "*",
     "vlucas/phpdotenv": "^5.3",

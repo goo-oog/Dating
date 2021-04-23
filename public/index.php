@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AppController;
 use App\Controllers\AuthController;
+use App\Controllers\NotFoundController;
 use App\Middlewares\AuthMiddleware;
 use App\Repositories\MySQLPhotosRepository;
 use App\Repositories\MySQLUsersRepository;
@@ -42,20 +43,20 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->post('/new-user', [AuthController::class, 'createNewUser']);
     $r->get('/add-photo', [AppController::class, 'showAddPhotoForm']);
     $r->post('/add-photo', [AppController::class, 'addPhoto']);
+    $r->post('/delete-photo', [AppController::class, 'deletePhoto']);
     $r->get('/my-profile', [AppController::class, 'showMyProfile']);
     $r->get('/photo/{photo}', [AppController::class, 'photo']);
     $r->post('/like', [AppController::class, 'like']);
     $r->post('/dislike', [AppController::class, 'dislike']);
     $r->get('/matches', [AppController::class, 'showMatches']);
-    $r->get('/user-profile/{id}', [AppController::class, 'showUserProfile']);
+    $r->get('/user-profile/{id}', [AppController::class, 'userProfile']);
+    $r->get('/user-profile', [AppController::class, 'showUserProfile']);
 });
 
-$middlewares = [
-    AppController::class . '@showMainPage' => [
-        AuthMiddleware::class
-    ]
+$allowedWithoutAuthorization = [
+    AuthController::class . '@showLoginForm',
+    AuthController::class . '@showCreateAccountForm'
 ];
-
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -66,19 +67,17 @@ $uri = rawurldecode($uri);
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        echo 'NOT_FOUND';//(new NotFoundController())->index();
+        echo (new NotFoundController())->index();
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
-        echo 'METHOD_NOT_ALLOWED';//(new NotFoundController())->index();
+        echo (new NotFoundController())->index();
         break;
     case FastRoute\Dispatcher::FOUND:
         [$controller, $method] = $routeInfo[1];
         $vars = $routeInfo[2];
-        $middlewareKey = $controller . '@' . $method;
-        $controllerMiddlewares = $middlewares[$middlewareKey] ?? [];
-        foreach ($controllerMiddlewares as $controllerMiddleware) {
-            (new $controllerMiddleware())->execute();
+        if (!in_array($controller . '@' . $method, $allowedWithoutAuthorization)) {
+            (new AuthMiddleware())->execute();
         }
         echo $container->get($controller)->$method($vars);
 }

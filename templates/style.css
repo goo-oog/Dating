@@ -3,9 +3,25 @@
 @tailwind utilities;
 
 .button {
-    @apply bg-gradient-to-b from-gray-200 via-gray-400 to-gray-200 text-black text-sm hover:text-white px-2 rounded-md
+    @apply h-7 bg-pink-50 border border-pink-300 text-pink-900 text-sm hover:bg-white hover:text-pink-300 px-2 pb-1 rounded-md
 }
 
 .text-input {
-    @apply text-center text-black w-20 text-lg border border-gray-500 rounded-md
+    @apply text-center text-black w-32 text-lg border border-pink-700 rounded-md
+}
+
+.title {
+    @apply text-center text-4xl text-pink-900 m-4
+}
+
+.photo-s {
+    @apply w-60 border-2 border-pink-900 rounded-xl m-2
+}
+
+.photo-m {
+    @apply w-96 border-2 border-pink-900 rounded-xl m-2
+}
+
+.photo-l {
+    @apply w-120 border-2 border-pink-900 rounded-xl m-2
 }

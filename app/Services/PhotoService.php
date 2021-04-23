@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Repositories\PhotosRepository;
 use App\Repositories\UsersRepository;
+use FilesystemIterator;
 
 class PhotoService
 {
@@ -20,9 +21,9 @@ class PhotoService
 
     public function addPhoto($file): void
     {
-        if ($file["error"] === 0) {
-            if ($file["size"] > 0 && $file["size"] < 8 * 1024 * 1024) {
-                if (in_array($file["type"], ['image/gif', 'image/jpeg', 'image/png'])) {
+        if ($file['error'] === 0) {
+            if ($file['size'] > 0 && $file['size'] < 8 * 1024 * 1024) {
+                if (in_array($file['type'], ['image/gif', 'image/jpeg', 'image/png'])) {
                     $filename = md5($file['name'] . microtime()) . '.' . substr($file['type'], strpos($file['type'], '/') + 1);
                     $directory1 = self::PHOTOS_PATH . substr($filename, 0, 2) . '/';
                     $directory2 = $directory1 . substr($filename, 2, 2) . '/';
@@ -35,15 +36,37 @@ class PhotoService
                     if (!is_dir($directory2)) {
                         mkdir($directory2);
                     }
-                    move_uploaded_file($file["tmp_name"], $directory2 . $filename);
+                    move_uploaded_file($file['tmp_name'], $directory2 . $filename);
                     $this->photos->addPhoto($this->users->getUserByHash($_SESSION['authId'])->id(), $filename, $file['name']);
-                    header('Location:/my-photos');
+                    header('Location:/my-profile');
+                } else {
+                    $_SESSION['uploadError'] = 'Only JPG, PNG ang GIF files allowed';
                 }
+            } else {
+                $_SESSION['uploadError'] = 'File size must not exceed 8 MB';
             }
+        } else {
+            $_SESSION['uploadError'] = 'Select file';
         }
+        header('Location:/add-photo');
     }
 
-    public function getPhoto(string $filename)
+    public function deletePhoto(string $filename): void
+    {
+        $directory1 = self::PHOTOS_PATH . substr($filename, 0, 2) . '/';
+        $directory2 = $directory1 . substr($filename, 2, 2) . '/';
+        unlink($directory2 . $filename);
+        if (is_dir($directory2) && !(new FilesystemIterator($directory2))->valid()) {
+            rmdir($directory2);
+        }
+        if (is_dir($directory1) && !(new FilesystemIterator($directory1))->valid()) {
+            rmdir($directory1);
+        }
+        $this->photos->deletePhoto($filename);
+        header('Location:/my-profile');
+    }
+
+    public function getPhoto(string $filename): string
     {
         $realFilename =
             self::PHOTOS_PATH

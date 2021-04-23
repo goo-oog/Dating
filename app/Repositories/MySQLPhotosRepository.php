@@ -22,6 +22,12 @@ class MySQLPhotosRepository implements PhotosRepository
             ->execute([$userid, $filename, $userFilename]);
     }
 
+    public function deletePhoto(string $filename): void
+    {
+        $this->mySQL->pdo()->prepare('DELETE FROM photos WHERE filename=?')
+            ->execute([$filename]);
+    }
+
     /**
      * @inheritDoc
      */

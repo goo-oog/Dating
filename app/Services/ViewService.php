@@ -13,7 +13,6 @@ class ViewService
     private PhotosRepository $photos;
     private TwigService $twig;
     private PhotoService $photoService;
-    private array $twigVariables;
 
     public function __construct(UsersRepository $users, PhotosRepository $photos, PhotoService $photoService)
     {
@@ -25,7 +24,7 @@ class ViewService
 
     public function draw(string $filename): string
     {
-        $this->twigVariables = [
+        $twigVariables = [
             'users' => $this->users,
             'photos' => $this->photos,
             'photoService' => $this->photoService,
@@ -33,12 +32,13 @@ class ViewService
         ];
         if (isset($_SESSION['authId'])) {
             try {
-                $this->twigVariables['currentUser'] = $this->users->getUserByHash($_SESSION['authId']);
+                $twigVariables['currentUser'] = $this->users->getUserByHash($_SESSION['authId']);
             } catch (ArgumentCountError $e) {
                 unset($_SESSION['authId']);
                 header('Location: /login');
             }
         }
-        return $this->twig->environment()->render($filename, $this->twigVariables);
+        unset($_SESSION['uploadError']);
+        return $this->twig->environment()->render($filename, $twigVariables);
     }
 }

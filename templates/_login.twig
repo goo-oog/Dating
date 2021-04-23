@@ -1,18 +1,18 @@
 {% extends 'base.twig' %}
 {% block main %}
     <div class="flex flex-col h-screen justify-center items-center">
-        <div class="p-12 border-2 border-blue-300 rounded-xl text-center">
+        <div class="p-12 border-2 border-pink-700 rounded-xl text-center">
             <div class="mb-12">
-                <p class="text-4xl">Log in</p>
+                <p class="text-3xl">Log in</p>
             </div>
-            <form method="post" action="/authentication" class="flex flex-col space-y-2">
+            <form method="post" action="/authentication" class="flex flex-col space-y-3">
                 <div class="flex justify-between space-x-2">
                     <label for="username">Name</label>
                     <input type="text" class="text-input" id="username" name="username">
                 </div>
                 <div class="flex justify-between space-x-2">
                     <label for="password">Password</label>
-                    <input type="text" class="text-input" id="password" name="password">
+                    <input type="password" class="text-input" id="password" name="password">
                 </div>
                 <div class="flex justify-center">
                     <input type="submit" class="button" value="Log in">
@@ -24,7 +24,6 @@
             <form method="get" action="/create-account">
                 <input type="submit" class="button" value="Create account">
             </form>
-            {# <a href="/create-account">Or create account</a> #}
         </div>
     </div>
 {% endblock %}

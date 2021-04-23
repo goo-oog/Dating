@@ -1,0 +1,13 @@
+{% extends 'base.twig' %}
+{% block main %}
+    <div class="flex flex-col h-screen justify-center items-center">
+        <div class="p-12 border-2 border-pink-700 rounded-xl text-center">
+            <div class="mb-12">
+                <p class="text-3xl">Page not found</p>
+            </div>
+            <form method="get" action="/">
+                <input type="submit" class="button" value="Home">
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.twig' %}
+{% block main %}
+    <p class="title">My profile</p>
+    <div class="text-center">
+        <form method="get" action="/add-photo">
+            <input type="submit" class="button m-4" value="Add photo">
+        </form>
+        {% for photo in photos.getUserPhotos(currentUser.id) %}
+            <div class="inline-flex justify-center items-center">
+                <div class="flex flex-col space-y-2">
+                    <img src="photo/{{ photo.filename[:32] }}{{ photo.filename[33:] }}" class="photo-m">
+                    <p class="text-xs">{{ photo.userFilename }}</p>
+                    <form method="post" action="/delete-photo">
+                        <input type="hidden" name="filename" value="{{ photo.filename }}">
+                        <input type="submit" class="button" value="Delete">
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
